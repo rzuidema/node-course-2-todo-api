@@ -36,3 +36,18 @@ describe('POST todos', () => {
             });
     });
 });
+
+describe('Get todos', () => {
+    it('Should retrieve a todo', (done) => {
+        request(app)
+        .get('/todos')
+        .send()
+        .expect(200)
+        .expect((res) => {
+            expect(res.body.text).toBe('Todo test');
+            done();
+        }).catch ((e) => {
+            done(e);
+        });
+    });
+});
