@@ -2,7 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 
 var {mongoose} = require('./db/mongoose'); 
-const {ObjectId} = require('mongodb');
+const {ObjectID} = require('mongodb');
 var {Todo} = require('./models/todo');
 var {User} = require('./models/user');
 
@@ -40,22 +40,21 @@ app.get('/todos', (req,res) => {
 app.get('/todos/:id', (req,res) => {
  //   res.send(req.params);
     var id = req.params.id;
-    if (!ObjectId.isValid(id)) {
+    if (!ObjectID.isValid(id)) {
         console.log('In obj id failed');
-        res.status(404).send();
+        return res.status(404).send();
     }
     Todo.findById(id).then((todos) => {
         if(todos){
             console.log('In found');
-            res.send({todos: todos});
+            return res.send({todos: todos});
         }
         else {
             console.log('In not found');
-            res.status(404).send({todos: todos});
+            return res.status(404).send({todos: todos});
         }
-    },(error)=>{
-        console.log('In Error');
-        res.status(400).send({});
+    }).catch((error) => {
+        return res.status(400).send();
     });
 });
 
