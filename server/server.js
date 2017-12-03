@@ -41,22 +41,44 @@ app.get('/todos/:id', (req,res) => {
  //   res.send(req.params);
     var id = req.params.id;
     if (!ObjectID.isValid(id)) {
-        console.log('In obj id failed');
+        //console.log('In obj id failed');
         return res.status(404).send();
     }
     Todo.findById(id).then((todos) => {
         if(todos){
-            console.log('In found');
+            //console.log('In found');
             return res.send({todos: todos});
         }
         else {
-            console.log('In not found');
+            //console.log('In not found');
             return res.status(404).send({todos: todos});
         }
     }).catch((error) => {
         return res.status(400).send();
     });
 });
+
+
+// app.get('/todos/:id', (req,res) => {
+//     //   res.send(req.params);
+//        var id = req.params.id;
+//        if (!ObjectID.isValid(id)) {
+//            console.log('In obj id failed');
+//            return res.status(404).send();
+//        }
+//        Todo.findById(id).then((todos) => {
+//            if(todos){
+//                console.log('In found');
+//                return res.send({todos: todos});
+//            }
+//            else {
+//                console.log('In not found');
+//                return res.status(404).send({todos: todos});
+//            }
+//        }, (error) => {
+//         return res.status(400).send();  
+//        });
+//    });
 
 app.listen(PORT||3000, () => {
     console.log(`Server started in port ${PORT}`);
