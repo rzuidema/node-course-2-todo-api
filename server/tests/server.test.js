@@ -1,13 +1,16 @@
 const expect = require('expect');
 const request = require('supertest');
+const {ObjectID} = require('mongodb');
 
 var {app} = require('./../server');
 var {Todo} = require('./../models/todo');
 var {User} = require('./../models/user');
 
 const todos = [{
+    _id: new ObjectID(),
     text: 'First test todo'
 },{
+    _id: new ObjectID(),
     text: 'Second test todo'
 }];
 
@@ -56,5 +59,27 @@ describe('Get todos', () => {
         }).catch ((e) => {
             done(e);
         });
+    });
+});
+
+describe('Get todos/:id', () => {
+    it('Should return a todo', (done) => {
+        console.log(`/todos/${todos[0]._id.toHexString()}`)
+        request(app)
+        .get(`/todos/${todos[0]._id.toHexString()}`)
+        .expect(200)
+        .expect((res)=> {
+            console.log(res.body.todos.text);
+            expect(res.body.todos.text).toBe('First test todo');
+        })
+        .end(done);
+    });
+
+    it('Should return not return a todo', (done) => {
+        console.log(`/todos/123`)
+        request(app)
+        .get(`/todos/123`)
+        .expect(404)
+        .end(done);
     });
 });
